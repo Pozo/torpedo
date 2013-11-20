@@ -3,6 +3,7 @@ package torpedo;
 import torpedo.coordinate.ConcreteTarget;
 import torpedo.coordinate.Coordinate;
 import torpedo.coordinate.TargetingSystem;
+import torpedo.network.protocol.FireResultType;
 
 
 public class SingleTorpedo implements Torpedo {
@@ -12,26 +13,26 @@ public class SingleTorpedo implements Torpedo {
 		this.board = board;
 	}
 	
-	public HitType fire(TargetingSystem targetingSystem) {
+	public FireResultType fire(TargetingSystem targetingSystem) {
 		Coordinate fireCoordinate = targetingSystem.getCoordinate();
-		
-		if(board.isCoordinateOnTheBoard(fireCoordinate)) {
 
+		//if(board.isCoordinateOnTheBoard(fireCoordinate)) {
 			for (Ship ship : board.getAllShip()) {
-				if(ship.containsCoordinate(fireCoordinate)) {
+				if(ship.hasCoordinate(fireCoordinate)) {
+				
 					ship.addHit(fireCoordinate);
 					if(ship.isWrecked()) {
-						return HitType.HIT_AND_WRECKED;
+						return FireResultType.SUNK;
 					} else {
-						return HitType.HIT;
+						return FireResultType.HIT;
 					}
 				}
 			}
-		}
-		return HitType.MISS;
+		//}
+		return FireResultType.MISS;
 	}
 
-	public HitType fire(int x, int y) {
+	public FireResultType fire(int x, int y) {
 		return this.fire(new ConcreteTarget(x, y));
 	}
 }

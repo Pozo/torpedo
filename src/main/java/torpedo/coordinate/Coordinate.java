@@ -1,14 +1,28 @@
 package torpedo.coordinate;
 
 public class Coordinate implements Comparable<Coordinate> {
-	private final int x;
-	private final int y;
+	private final int originX;
+	private final int originY;
+	
+	private int x;
+	private int y;
 	
 	public Coordinate(int x, int y) {
+		this.originX = x;
+		this.originY = y;
+		
 		this.x = x;
 		this.y = y;
 	}
-
+	public boolean hasNegativeMember() {
+		if(getX()<0) {
+			return true;
+		}
+		if(getY()<0) {
+			return true;
+		}
+		return false;
+	}
 	public int getX() {
 		return x;
 	}
@@ -44,11 +58,10 @@ public class Coordinate implements Comparable<Coordinate> {
 
 	@Override
 	public String toString() {
-		return getClass().getName() + " {\n\tx: " + x + "\n\ty: " + y + "\n}";
+		return getClass().getName() + " {\tx: " + x + "\ty: " + y + "}\n";
 	}
 
 	public int compareTo(Coordinate o) {
-		System.out.println("asdsad");
 		if(this.equals(o)) {
 			return 0;
 		}
@@ -57,5 +70,33 @@ public class Coordinate implements Comparable<Coordinate> {
 		} else {
 			return -1;
 		}
+	}
+	public void offset(Coordinate origo) {
+		this.x = (this.originX + origo.getX());
+		this.y = (this.originY + origo.getY());
+	}
+	public boolean hasLeftNeighbor(int boardWidth) {
+		if(this.getY() > 0 && boardWidth>0 ) {
+			return true;
+		}
+		return false;
+	}
+	public boolean hasRightNeighbor(int boardWidth) {
+		if(this.getY()< boardWidth-1 && boardWidth>0) {
+			return true;
+		}
+		return false;
+	}
+	public boolean hasTopNeighbor(int boardHeight) {
+		if(this.getX() > 0 && boardHeight>0) {
+			return true;
+		}
+		return false;
+	}
+	public boolean hasBottomNeighbor(int boardHeight) {
+		if(this.getX()<boardHeight-1) {
+			return true;
+		}
+		return false;
 	}
 }

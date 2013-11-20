@@ -1,0 +1,34 @@
+package torpedo.coordinate;
+
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+public class CachedRandomTargetTest {
+
+	@Before
+	public void setUp() throws Exception {
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void testGetCoordinate() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testCachedRandomTarget() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetPreviuscoordinates() {
+		fail("Not yet implemented");
+	}
+
+}

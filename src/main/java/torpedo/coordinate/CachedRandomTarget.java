@@ -2,23 +2,26 @@ package torpedo.coordinate;
 
 import java.util.HashSet;
 
-public class CachedRandomTarget extends RandomTarget {
+public class CachedRandomTarget implements TargetingSystem {
 	private static final HashSet<Coordinate> previusCoordinates = new HashSet<Coordinate>();
-
+	private final RandomTarget randomTarget;
+	
 	public CachedRandomTarget(int bound) {
-		super(bound);
+		randomTarget = new RandomTarget(bound);
 	}
 	public static HashSet<Coordinate> getPreviuscoordinates() {
 		return previusCoordinates;
 	}
-	@Override
 	public Coordinate getCoordinate() {
-		Coordinate randomCoordinate = generateCoordinate();
+		Coordinate randomCoordinate = randomTarget.generateCoordinate();
 		
 		while(!previusCoordinates.add(randomCoordinate)) {
 
-			randomCoordinate = generateCoordinate();
+			randomCoordinate = randomTarget.generateCoordinate();
 		}
 		return randomCoordinate;
+	}
+	public HashSet<Coordinate> getCachedCoordinates() {
+		return previusCoordinates;
 	}
 }

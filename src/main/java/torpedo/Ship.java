@@ -6,9 +6,11 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import torpedo.coordinate.Coordinate;
+import torpedo.coordinate.CoordinateArrayUtils;
+import torpedo.coordinate.CoordinateArrayUtils.Action;
 
 public class Ship {
-	private String name;
+	private String name = "";
 	private final HashMap<Coordinate, Boolean> shipCoordinates = new HashMap<Coordinate,Boolean>();
 	
 	public Ship(ArrayList<Coordinate> shipPoints) {
@@ -32,16 +34,40 @@ public class Ship {
 	}
 
 	public void addHit(Coordinate coordinate) {
-		shipCoordinates.put(coordinate, true);
+		if(hasCoordinate(coordinate)) {
+			shipCoordinates.put(coordinate, true);
+		} else {
+			throw new IllegalArgumentException(String.format("Ship is not contain this coordinate: %s", coordinate));
+		}
 	}
-	public boolean containsCoordinate(Coordinate lookingForThisCoordinate) {
-		return shipCoordinates.keySet().contains(lookingForThisCoordinate);
+	public boolean hasCoordinate(Coordinate coordinate) {
+		return shipCoordinates.keySet().contains(coordinate);
+		/*
+		for (Coordinate coord : getCoordinates()) {
+			if(coordinate.equals(coord)) {
+				return true;
+			}
+		}
+		return false;
+		*/
 	}
-	public int getSize() {
+	public int getCoordinatesNumber() {
 		return shipCoordinates.size();
 	}
-
-	public Set<Coordinate> getShipCoordinates() {
+	private ArrayList<Coordinate> getShipCoordinatesAsList() {
+		ArrayList<Coordinate> coodinates = new ArrayList<Coordinate>();
+		coodinates.addAll(getCoordinates());
+		return coodinates;
+	}
+	public int getMaxWidth() {
+		CoordinateArrayUtils coordinateArrayUtils = new CoordinateArrayUtils(getShipCoordinatesAsList());
+		return coordinateArrayUtils.getFarestCoordinateBy(Action.MOST_RIGT) - coordinateArrayUtils.getFarestCoordinateBy(Action.MOST_LEFT)+1;
+	}
+	public int getMaxHeight() {
+		CoordinateArrayUtils coordinateArrayUtils = new CoordinateArrayUtils(getShipCoordinatesAsList());
+		return coordinateArrayUtils.getFarestCoordinateBy(Action.MOST_UPPER) - coordinateArrayUtils.getFarestCoordinateBy(Action.MOST_LOWER)+1;		
+	}
+	public Set<Coordinate> getCoordinates() {
 		return shipCoordinates.keySet();
 	}
 
@@ -55,5 +81,23 @@ public class Ship {
 	}
 	public String getName() {
 		return name;
-	}	
+	}
+	public boolean hasCommonCoordinate(Ship ship) {
+		for(Coordinate coordinate : this.getCoordinates()) {
+			for (Coordinate otherCoordinate : ship.getCoordinates()) {
+				if(coordinate.equals(otherCoordinate)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	public void transformCoordinates(Coordinate origo) {
+		for (Coordinate coordinate : getCoordinates()) {
+			coordinate.offset(origo);
+		}		
+	}
+	public boolean addCoordinate(Coordinate coordinate) {
+		return shipCoordinates.put(coordinate, false);
+	}
 }

@@ -1,54 +1,80 @@
 package torpedo;
 
-import topedo.utils.GameBoardPrinter;
-import topedo.utils.ShipGenerator;
+import java.util.ArrayList;
+
 import torpedo.coordinate.CachedRandomTarget;
 import torpedo.coordinate.Coordinate;
 import torpedo.coordinate.RandomTarget;
+import torpedo.network.protocol.FireResultType;
+import torpedo.utils.GameBoardPrinter;
+import torpedo.utils.ShipFromFile;
+import torpedo.utils.ShipRandomly;
 
 
 
 public class App {
-	private static final int BOARD_SIZE = 8;
+	private static final int BOARD_SIZE = 20;
 	
 	private static final int DEFAULT_SHIP_NUMBER = 2;
 	
 	public static void main(String[] args) {
-		SquareGameBoard player1Board = new SquareGameBoard(BOARD_SIZE);
-		initializePlayerBoard(player1Board, DEFAULT_SHIP_NUMBER);
+		SquareGameBoard gameBoard = new SquareGameBoard(BOARD_SIZE);
+		//initializeRandomBoard(gameBoard, DEFAULT_SHIP_NUMBER);
+		initializeBoardFromFile(gameBoard);
 		
-		int fireCount = 0;
-		
-		new GameBoardPrinter(player1Board).print();
-
-		while(!player1Board.isAllShipWrecked()) {
-			SingleTorpedo playerTorpedo = new SingleTorpedo(player1Board);
+		new GameBoardPrinter(gameBoard).print();
+		System.out.println(gameBoard.getPlacedShipNumber());
+		while(!gameBoard.isAllShipWrecked()) {
+			SingleTorpedo playerTorpedo = new SingleTorpedo(gameBoard);
 			
-			HitType fire = playerTorpedo.fire(new CachedRandomTarget(BOARD_SIZE));
+			CachedRandomTarget targetingSystem = new CachedRandomTarget(BOARD_SIZE);
+			FireResultType fire = playerTorpedo.fire(targetingSystem);
 			
-			if(fire == HitType.HIT) {
+			if(fire == FireResultType.HIT) {
 				System.out.println("HIT! ");
-			} else if(fire == HitType.MISS) {
-				System.out.println("MISS! ");
-			} else if(fire == HitType.HIT_AND_WRECKED) {
+			} else if(fire == FireResultType.MISS) {
+				//System.out.println("MISS! ");
+			} else if(fire == FireResultType.SUNK) {
 				System.out.println("Wrecked! ");
 			}
-			
-			fireCount++;
+			gameBoard.incrementFireCount();
 		}
-		System.out.println("Number of fire : " + fireCount);
+		System.out.println("Number of fire : " + gameBoard.getFireCount());
 
 	}
-	public static void initializePlayerBoard(SquareGameBoard playerBoard, int shipCount) {
+	public static void initializeRandomBoard(SquareGameBoard playerBoard, int shipCount) {
 		while (playerBoard.getPlacedShipNumber() != shipCount) {
 			try {
-				Coordinate coordinate = new RandomTarget(BOARD_SIZE).getCoordinate();
-				Ship ship = ShipGenerator.getShip(BOARD_SIZE);
+				Coordinate coordinate = new RandomTarget(playerBoard.getBoardWidth()).getCoordinate();
+				Ship ship = new ShipRandomly(ShipRandomly.RECTANGLE_SIZE).getShip();
 				playerBoard.placeShipTo(coordinate, ship);				
 			} catch (IllegalArgumentException exception) {
-				
+				//System.out.println(exception.getMessage());
 			}
 
+		}
+	}
+	public static void initializeBoardFromFile(SquareGameBoard playerBoard) {
+		ShipFromFile shipsFromFile = new ShipFromFile("ships.txt");
+		ArrayList<Ship> ships = shipsFromFile.getShips();
+		
+	
+		for(Ship ship : ships) {
+			boolean success = false;
+			
+			while(!success) {
+				try {
+					Coordinate coordinate = new RandomTarget(playerBoard.getBoardWidth()).getCoordinate();
+					System.out.println(coordinate);
+					System.out.println(ship);
+					ship.transformCoordinates(coordinate);
+					System.out.println(ship);
+					success = playerBoard.placeShipTo(coordinate, ship);
+				} catch (IllegalArgumentException exception) {
+					//System.out.println(exception.getMessage());
+				}			
+			}
+			break;
 		}
 	}
 }

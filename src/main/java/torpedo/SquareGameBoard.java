@@ -9,17 +9,23 @@ import torpedo.coordinate.Coordinate;
 
 public class SquareGameBoard implements GameBoard {
 	private final int boardSize;
-	
+	private final ShipPlacer shipPlacer;
 	private ArrayList<Ship> shipsOnBoard = new ArrayList<Ship>();
+
+	private int firecount;
 	
 	public SquareGameBoard(int boardSize) {
+		if(boardSize<5 || boardSize>25) {
+			throw new IllegalArgumentException("The board size must be between 5 andd 25");
+		}
 		this.boardSize = boardSize;
+		this.shipPlacer = new ShipPlacer(this);
 	}
 	public Set<Coordinate> getAllShipCoordinates() {
 		HashSet<Coordinate> coordinates = new HashSet<Coordinate>();
 		
 		for (Ship ship : shipsOnBoard) {
-			coordinates.addAll(ship.getShipCoordinates());
+			coordinates.addAll(ship.getCoordinates());
 		}
 		
 		return coordinates;
@@ -34,43 +40,33 @@ public class SquareGameBoard implements GameBoard {
 		boolean allWrecked = true;
 		
 		for (Ship ship : shipsOnBoard) {
-			System.out.println("--");
-			System.out.println(ship.isWrecked());
-			System.out.println("--");
 			allWrecked &= ship.isWrecked();
 		}
 		return allWrecked;
 	}
-	public boolean placeShipTo(Coordinate coordinate, Ship ship) {
-		validateShipCoordinate(coordinate);
-		
-		if(!shipsOnBoard.contains(ship)) {
-			return shipsOnBoard.add(ship);
-		} else {
-			return false;
-		}
-	}
-	private void validateShipCoordinate(Coordinate coordinate) {
-		isCoordinateOnTheBoard(coordinate);
-		isThereAnyCollision(coordinate);
-	}
-	private void isThereAnyCollision(Coordinate coordinate) {
-		for (Ship ship : shipsOnBoard) {
-			if(ship.containsCoordinate(coordinate)) {
-				throw new IllegalArgumentException("There are some collision !");
-			}
-		}
-	}
-	public boolean isCoordinateOnTheBoard(Coordinate fireCoordinate) {
-		if(fireCoordinate.getX() <= this.getBoardWidth() && fireCoordinate.getY() <= this.getBoardHeight()) {
-			return true;
-		}
-		throw new IllegalArgumentException("The hit must be on the Board !");
+	public boolean placeShipTo(Coordinate placeHere, Ship ship) {
+		return shipPlacer.placeShipTo(placeHere, ship);
 	}
 	public int getBoardWidth() {
 		return boardSize;
 	}
 	public int getBoardHeight() {
 		return boardSize;
+	}
+	public int getFireCount() {
+		return firecount;
+	}
+	public void incrementFireCount() {
+		firecount++;
+	}
+	public boolean isCoordinateOnTheBoard(Coordinate coordinate) {
+		if(coordinate.getX()<getBoardWidth() && coordinate.getY()<getBoardHeight()) {
+			return true;
+		}
+
+		return false;
+	}
+	public boolean addShip(Ship ship) {
+		return shipsOnBoard.add(ship);
 	}
 }
