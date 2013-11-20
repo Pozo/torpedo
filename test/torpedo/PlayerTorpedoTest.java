@@ -34,8 +34,8 @@ public class PlayerTorpedoTest {
 	public void testFireHit() {
 		int boardSize = 20;
 		
-		int fireCoordinateX = 10;
-		int fireCoordinateY = 10;
+		int fireCoordinateX = 5;
+		int fireCoordinateY = 5;
 		
 		SquareGameBoard board = new SquareGameBoard(boardSize);
 		Coordinate coordinate = new Coordinate(fireCoordinateX, fireCoordinateY);
@@ -44,7 +44,8 @@ public class PlayerTorpedoTest {
 		board.placeShip(ship);
 	
 		SingleTorpedo playerTorpedoTest = new SingleTorpedo(board);
-		Assert.assertTrue((playerTorpedoTest.fire(new ExactTarget(fireCoordinateX, fireCoordinateY))) == FireResultType.HIT );
+		ExactTarget targetingSystem = new ExactTarget(fireCoordinateX+10, fireCoordinateY+10);
+		Assert.assertTrue((playerTorpedoTest.fire(targetingSystem)) == FireResultType.HIT);
 	}
 	@Test
 	public void testFireHitWreckedStatus() {

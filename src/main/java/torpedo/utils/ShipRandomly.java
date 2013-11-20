@@ -34,7 +34,7 @@ public class ShipRandomly {
 			}
 		}
 
-		return new Ship(coordinates, ShipNameGenerator.getRandomName());
+		return new Ship(coordinates);
 	}
 	private static boolean validateCoordinateIntegrability(ArrayList<Coordinate> coordinates, Coordinate coordinate) {
 		return CoordinateUtils.isNeighborStrict(coordinates.get(coordinates.size()-1), coordinate) 

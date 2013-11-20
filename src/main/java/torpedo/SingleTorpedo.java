@@ -17,20 +17,18 @@ public class SingleTorpedo implements Torpedo {
 	
 	public FireResultType fire(TargetingSystem targetingSystem) {
 		Coordinate fireCoordinate = targetingSystem.getCoordinate();
-
-		//if(board.isCoordinateOnTheBoard(fireCoordinate)) {
-			for (Ship ship : board.getAllShip()) {
-				if(ship.hasCoordinate(fireCoordinate)) {
-				
-					ship.addHit(fireCoordinate);
-					if(ship.isWrecked()) {
-						return FireResultType.SUNK;
-					} else {
-						return FireResultType.HIT;
-					}
+		
+		for (Ship ship : board.getAllShip()) {
+			if(ship.hasCoordinate(fireCoordinate)) {
+			
+				ship.addHit(fireCoordinate);
+				if(ship.isWrecked()) {
+					return FireResultType.SUNK;
+				} else {
+					return FireResultType.HIT;
 				}
 			}
-		//}
+		}
 		return FireResultType.MISS;
 	}
 

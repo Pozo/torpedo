@@ -14,7 +14,7 @@ import torpedo.utils.ShipRandomly;
 
 
 public class App {
-	private static final int BOARD_SIZE = 20;
+	private static final int BOARD_SIZE = 5;
 	
 	private static final int DEFAULT_SHIP_NUMBER = 2;
 	
@@ -24,12 +24,11 @@ public class App {
 		//initializeBoardFromFile(gameBoard);
 		
 		new GameBoardPrinter(gameBoard).print();
-		System.out.println(gameBoard.getPlacedShipNumber());
 		
 		while(!gameBoard.isAllShipWrecked() && gameBoard.isAllCoordinateHitted()) {
 			SingleTorpedo playerTorpedo = new SingleTorpedo(gameBoard);
 			
-			CachedRandomTarget targetingSystem = new CachedRandomTarget(BOARD_SIZE);
+			CachedRandomTarget targetingSystem = new CachedRandomTarget(gameBoard.getBoardHeight());
 			FireResultType fire = playerTorpedo.fire(targetingSystem);
 			
 			if(fire == FireResultType.HIT) {

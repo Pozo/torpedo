@@ -1,5 +1,6 @@
 package torpedo.coordinate;
 
+
 public class Coordinate implements Comparable<Coordinate> {
 	private final int originX;
 	private final int originY;

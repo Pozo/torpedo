@@ -67,7 +67,7 @@ public class SquareGameBoard implements GameBoard {
 		if(coordinate.getX()<getBoardWidth() && coordinate.getY()<getBoardHeight()) {
 			return true;
 		}
-		throw new IllegalArgumentException("The hit must be on the Board !");
+		throw new IllegalArgumentException("The Coordinate must be on the Board !");
 	}
 	public boolean addShip(Ship ship) {
 		return shipsOnBoard.add(ship);

@@ -11,6 +11,7 @@ import org.junit.Test;
 import torpedo.aim.ExactTarget;
 import torpedo.board.SquareGameBoard;
 import torpedo.coordinate.Coordinate;
+import torpedo.utils.GameBoardPrinter;
 
 public class SingleTorpedoTest {
 
@@ -50,6 +51,8 @@ public class SingleTorpedoTest {
 		ship2.transformCoordinates(coordinate);
 		player1Board.placeShip(ship2);
 		
+		
+		new GameBoardPrinter(player1Board).print();
 		SingleTorpedo playerTorpedo = new SingleTorpedo(player1Board);
 		
 		playerTorpedo.fire(new ExactTarget(1, 1));
@@ -63,7 +66,7 @@ public class SingleTorpedoTest {
 		playerTorpedo.fire(new ExactTarget(8, 8));
 		playerTorpedo.fire(new ExactTarget(7, 8));
 		
-		player1Board.getAllShip();
+		System.out.println(player1Board.getAllShip());
 	}
 
 	@Test

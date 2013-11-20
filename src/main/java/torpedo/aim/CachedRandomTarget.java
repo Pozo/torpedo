@@ -17,7 +17,7 @@ public class CachedRandomTarget implements TargetingSystem {
 	public Coordinate getCoordinate() {
 		Coordinate randomCoordinate = randomTarget.generateCoordinate();
 		
-		while(!previusCoordinates.add(randomCoordinate) && previusCoordinates.size() < randomTarget.getBound() * randomTarget.getBound()) {
+		while(!previusCoordinates.add(randomCoordinate)) {
 
 			randomCoordinate = randomTarget.generateCoordinate();
 		}

@@ -1,4 +1,4 @@
-package torpedo;
+package torpedo.network;
 
 import static org.junit.Assert.*;
 
@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ShipPlacerTest {
+public class ClientTest {
 
 	@Before
 	public void setUp() throws Exception {
@@ -17,17 +17,12 @@ public class ShipPlacerTest {
 	}
 
 	@Test
-	public void testShipPlacer() {
+	public void testClient() {
 		fail("Not yet implemented");
 	}
 
 	@Test
-	public void testPlaceShipTo() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testIsCoordinateOnTheBoard() {
+	public void testSendRequest() {
 		fail("Not yet implemented");
 	}
 
