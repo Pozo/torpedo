@@ -7,7 +7,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import torpedo.coordinate.ConcreteTarget;
+import torpedo.aim.ExactTarget;
+import torpedo.board.SquareGameBoard;
 import torpedo.coordinate.Coordinate;
 import torpedo.network.protocol.FireResultType;
 
@@ -37,10 +38,13 @@ public class PlayerTorpedoTest {
 		int fireCoordinateY = 10;
 		
 		SquareGameBoard board = new SquareGameBoard(boardSize);
-		board.placeShipTo(new Coordinate(fireCoordinateX, fireCoordinateY), new Ship(getCoordinates()));
+		Coordinate coordinate = new Coordinate(fireCoordinateX, fireCoordinateY);
+		Ship ship = new Ship(getCoordinates());
+		ship.transformCoordinates(coordinate);
+		board.placeShip(ship);
 	
 		SingleTorpedo playerTorpedoTest = new SingleTorpedo(board);
-		Assert.assertTrue((playerTorpedoTest.fire(new ConcreteTarget(fireCoordinateX, fireCoordinateY))) == FireResultType.HIT );
+		Assert.assertTrue((playerTorpedoTest.fire(new ExactTarget(fireCoordinateX, fireCoordinateY))) == FireResultType.HIT );
 	}
 	@Test
 	public void testFireHitWreckedStatus() {
@@ -50,15 +54,18 @@ public class PlayerTorpedoTest {
 		int fireCoordinateY = 10;
 		
 		SquareGameBoard board = new SquareGameBoard(boardSize);
+		
+		Coordinate coordinate = new Coordinate(fireCoordinateX, fireCoordinateY);
 		Ship ship = new Ship(getCoordinates());
-		board.placeShipTo(new Coordinate(fireCoordinateX, fireCoordinateY), ship);
+		ship.transformCoordinates(coordinate);
+		board.placeShip(ship);
 	
 		SingleTorpedo playerTorpedoTest = new SingleTorpedo(board);
-		ConcreteTarget targetingSystem = new ConcreteTarget(fireCoordinateX, fireCoordinateY);
+		ExactTarget targetingSystem = new ExactTarget(fireCoordinateX, fireCoordinateY);
 		
 		playerTorpedoTest.fire(targetingSystem);
 		
-		targetingSystem = new ConcreteTarget(0, 0);
+		targetingSystem = new ExactTarget(0, 0);
 		playerTorpedoTest.fire(targetingSystem);
 		
 		System.out.println(ship);
@@ -73,11 +80,15 @@ public class PlayerTorpedoTest {
 		int fireCoordinateY = 11;
 		
 		SquareGameBoard board = new SquareGameBoard(boardSize);
-		board.placeShipTo(new Coordinate(fireCoordinateX, fireCoordinateY), new Ship(getCoordinates()));
+		
+		Coordinate coordinate = new Coordinate(fireCoordinateX, fireCoordinateY);
+		Ship ship = new Ship(getCoordinates());
+		ship.transformCoordinates(coordinate);
+		board.placeShip(ship);
 	
 		SingleTorpedo playerTorpedoTest = new SingleTorpedo(board);
 
-		Assert.assertTrue((playerTorpedoTest.fire(new ConcreteTarget(fireCoordinateX+1, fireCoordinateY))) == FireResultType.MISS );
+		Assert.assertTrue((playerTorpedoTest.fire(new ExactTarget(fireCoordinateX+1, fireCoordinateY))) == FireResultType.MISS );
 	}
 	@Test(expected = IllegalArgumentException.class)
 	public void testFireOutOfBoard() {
@@ -87,10 +98,13 @@ public class PlayerTorpedoTest {
 		int fireCoordinateY = 11;
 		
 		SquareGameBoard board = new SquareGameBoard(boardSize);
-		board.placeShipTo(new Coordinate(fireCoordinateX, fireCoordinateY), new Ship(getCoordinates()));
+		Coordinate coordinate = new Coordinate(fireCoordinateX, fireCoordinateY);
+		Ship ship = new Ship(getCoordinates());
+		ship.transformCoordinates(coordinate);
+		board.placeShip(ship);
 	
 		SingleTorpedo playerTorpedoTest = new SingleTorpedo(board);
-		Assert.assertTrue((playerTorpedoTest.fire(new ConcreteTarget(fireCoordinateX+1, fireCoordinateY))) == FireResultType.MISS );
+		Assert.assertTrue((playerTorpedoTest.fire(new ExactTarget(fireCoordinateX+1, fireCoordinateY))) == FireResultType.MISS );
 	
 	}
 }

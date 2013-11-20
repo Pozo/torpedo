@@ -10,6 +10,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Client {
+	private static final String SIGNAL_END = "\n";
+	
 	private final InetAddress address;
 	private final int portNumber;
 
@@ -24,8 +26,7 @@ public class Client {
 		this.writeRequest(socket, request);
 		String response = this.readRequest(socket);
 
-		socket.close();
-		
+		socket.close();		
 		return response;
 
 	}
@@ -35,7 +36,7 @@ public class Client {
 	}
 	private void writeRequest(Socket socket, String message) throws IOException {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-		bw.write(message+"\n");
+		bw.write(message + SIGNAL_END);
 		bw.flush();			
 	}
 }

@@ -1,10 +1,11 @@
-package torpedo;
+package torpedo.board;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import torpedo.Ship;
 import torpedo.coordinate.Coordinate;
 
 public class SquareGameBoard implements GameBoard {
@@ -44,8 +45,8 @@ public class SquareGameBoard implements GameBoard {
 		}
 		return allWrecked;
 	}
-	public boolean placeShipTo(Coordinate placeHere, Ship ship) {
-		return shipPlacer.placeShipTo(placeHere, ship);
+	public boolean placeShip(Ship ship) {
+		return shipPlacer.placeShip(ship);
 	}
 	public int getBoardWidth() {
 		return boardSize;
@@ -56,6 +57,9 @@ public class SquareGameBoard implements GameBoard {
 	public int getFireCount() {
 		return firecount;
 	}
+	public boolean isAllCoordinateHitted() {
+		return getFireCount()<(getBoardHeight()*getBoardWidth());
+	}
 	public void incrementFireCount() {
 		firecount++;
 	}
@@ -63,8 +67,7 @@ public class SquareGameBoard implements GameBoard {
 		if(coordinate.getX()<getBoardWidth() && coordinate.getY()<getBoardHeight()) {
 			return true;
 		}
-
-		return false;
+		throw new IllegalArgumentException("The hit must be on the Board !");
 	}
 	public boolean addShip(Ship ship) {
 		return shipsOnBoard.add(ship);

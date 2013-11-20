@@ -21,26 +21,9 @@ public class MinerClient extends Client implements MinerProtocol {
 
 			while((request = br.readLine().toUpperCase())!=null) {
 				if(request.startsWith(MinerProtocol.PROCEDURE_FIRE)) {
-					if(new RequestValidator(request).validate()) {
-						String[] splittedRequest = request.split(MinerProtocol.PROCEDURE_PARAMETER_SEPARATOR);
-						
-						if(splittedRequest.length == 3) {
-							int xCoordinate = Integer.valueOf(splittedRequest[1]);
-							int yCoordinate = Integer.valueOf(splittedRequest[2]);
-							
-							System.out.println(client.fire(xCoordinate, yCoordinate));							
-						}
-					} else {
-						System.err.println("Wrong request !");
-					}
+					callFire(client, request);
 				} else if(request.startsWith(MinerProtocol.PROCEDURE_GREETING)) {
-					String[] splittedRequest = request.split(MinerProtocol.PROCEDURE_PARAMETER_SEPARATOR);
-					
-					if(splittedRequest.length == 2) {
-						int boardSize = Integer.valueOf(splittedRequest[1]);
-
-						client.greeting(boardSize);
-					}
+					callGreeting(client, request);
 				} else if(request.startsWith("QUIT")) {
 					System.out.println("Bye looser");
 					break;
@@ -50,6 +33,39 @@ public class MinerClient extends Client implements MinerProtocol {
 		} else {
 			System.err.println("You must specify the host and port number! (host first)");
 		}
+	}
+
+	private static void callGreeting(MinerClient client, String request) {
+		String[] splittedRequest = request.split(MinerProtocol.PROCEDURE_PARAMETER_SEPARATOR);
+		
+		if(splittedRequest.length == 2) {
+			doGreeting(client, splittedRequest);
+		}
+	}
+
+	private static void doGreeting(MinerClient client, String[] splittedRequest) {
+		int boardSize = Integer.valueOf(splittedRequest[1]);
+
+		client.greeting(boardSize);
+	}
+
+	private static void callFire(MinerClient client, String request) {
+		if(new RequestValidator(request).validate()) {
+			String[] splittedRequest = request.split(MinerProtocol.PROCEDURE_PARAMETER_SEPARATOR);
+			
+			if(splittedRequest.length == 3) {
+				doFire(client, splittedRequest);							
+			}
+		} else {
+			System.err.println("Wrong request !");
+		}
+	}
+
+	private static void doFire(MinerClient client, String[] splittedRequest) {
+		int xCoordinate = Integer.valueOf(splittedRequest[1]);
+		int yCoordinate = Integer.valueOf(splittedRequest[2]);
+		
+		System.out.println(client.fire(xCoordinate, yCoordinate));
 	}
 	
 	public MinerClient(InetAddress address, int portNumber)	throws UnknownHostException, IOException {
@@ -74,23 +90,28 @@ public class MinerClient extends Client implements MinerProtocol {
 			String response = sendRequest(String.format("FIRE %s %s", String.valueOf(x), String.valueOf(y))).toUpperCase();
 			
 			if(new ResponseValidator(response).validate()) {
-				if(response.equals(FireResultType.HIT.name())) {
-					retval = FireResultType.HIT;
-					
-				} else if(response.equals(FireResultType.MISS.name())) {
-					retval = FireResultType.MISS;
-					
-				} else if(response.equals(FireResultType.SUNK.name())) {
-					retval = FireResultType.SUNK;
-					
-				} else if(response.equals(FireResultType.WIN.name())) {
-					retval = FireResultType.WIN;
-				}
+				retval = decideFireType(retval, response);
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		return retval;
+	}
+
+	private FireResultType decideFireType(FireResultType retval, String response) {
+		if(response.equals(FireResultType.HIT.name())) {
+			retval = FireResultType.HIT;
+			
+		} else if(response.equals(FireResultType.MISS.name())) {
+			retval = FireResultType.MISS;
+			
+		} else if(response.equals(FireResultType.SUNK.name())) {
+			retval = FireResultType.SUNK;
+			
+		} else if(response.equals(FireResultType.WIN.name())) {
+			retval = FireResultType.WIN;
 		}
 		return retval;
 	}

@@ -1,6 +1,8 @@
-package torpedo.coordinate;
+package torpedo.aim;
 
 import java.util.Random;
+
+import torpedo.coordinate.Coordinate;
 
 public class RandomTarget implements TargetingSystem {
 	private static Random rand = new Random();

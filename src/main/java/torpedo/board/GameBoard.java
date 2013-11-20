@@ -1,8 +1,9 @@
-package torpedo;
+package torpedo.board;
 
 import java.util.Collection;
 import java.util.Set;
 
+import torpedo.Ship;
 import torpedo.coordinate.Coordinate;
 
 public interface GameBoard {
@@ -12,7 +13,7 @@ public interface GameBoard {
 	public int getFireCount();
 	public void incrementFireCount();
 	public boolean isAllShipWrecked();
-	public boolean placeShipTo(Coordinate coordinate, Ship ship);
+	public boolean placeShip(Ship ship);
 	public boolean isCoordinateOnTheBoard(Coordinate coordinate);
 	public boolean addShip(Ship ship);
 	

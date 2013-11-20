@@ -47,7 +47,6 @@ public class ShipFromFile implements ShipRepository {
 			} else {
 				sb.append(line);
 				sb.append("\n");
-				//parseLine(line);
 			}
 			
 		}
@@ -75,9 +74,7 @@ public class ShipFromFile implements ShipRepository {
 				char chr = line[i].charAt(j);
 				if(chr == 'X') {
 					list.add(new Coordinate(j, line.length-i-1));
-				} //else if(chr == 'O') {
-					
-				//}
+				}
 			}
 		}
 
@@ -101,11 +98,4 @@ public class ShipFromFile implements ShipRepository {
 	    }
 		return fileContent;
 	}
-	/*
-	public static void main(String[] args) {
-		ShipFromFile ships = new ShipFromFile("ships.txt");
-		System.out.println(ships.getShips());
-		//ships.getShips();
-	}
-	*/
 }

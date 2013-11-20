@@ -3,11 +3,11 @@ package torpedo.utils;
 import java.util.ArrayList;
 
 import torpedo.Ship;
+import torpedo.aim.RandomTarget;
 import torpedo.coordinate.Coordinate;
 import torpedo.coordinate.CoordinateArrayUtils;
 import torpedo.coordinate.CoordinateArrayUtils.Action;
 import torpedo.coordinate.CoordinateUtils;
-import torpedo.coordinate.RandomTarget;
 
 public class ShipRandomly {
 	public static final int RECTANGLE_SIZE = 4;

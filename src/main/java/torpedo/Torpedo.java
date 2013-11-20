@@ -1,6 +1,6 @@
 package torpedo;
 
-import torpedo.coordinate.TargetingSystem;
+import torpedo.aim.TargetingSystem;
 import torpedo.network.protocol.FireResultType;
 
 public interface Torpedo {

@@ -1,6 +1,6 @@
 package torpedo.utils;
 
-import torpedo.GameBoard;
+import torpedo.board.GameBoard;
 import torpedo.coordinate.Coordinate;
 
 

@@ -8,7 +8,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import torpedo.coordinate.ConcreteTarget;
+import torpedo.aim.ExactTarget;
+import torpedo.board.SquareGameBoard;
 import torpedo.coordinate.Coordinate;
 
 public class SingleTorpedoTest {
@@ -36,24 +37,31 @@ public class SingleTorpedoTest {
 	}
 	@Test
 	public void testSingleTorpedo() {
-		ConcreteTarget target = new ConcreteTarget(10, 10);
+		ExactTarget target = new ExactTarget(10, 10);
 		SquareGameBoard player1Board = new SquareGameBoard(15);
 		
-		player1Board.placeShipTo(new Coordinate(0, 0), new Ship(getCoordinates()));
-		player1Board.placeShipTo(new Coordinate(0, 0), new Ship(getCoordinatesTwo()));
+		Coordinate coordinate = new Coordinate(0, 0);
+		
+		Ship ship = new Ship(getCoordinates());
+		ship.transformCoordinates(coordinate);
+		player1Board.placeShip(ship);
+		
+		Ship ship2 = new Ship(getCoordinatesTwo());
+		ship2.transformCoordinates(coordinate);
+		player1Board.placeShip(ship2);
 		
 		SingleTorpedo playerTorpedo = new SingleTorpedo(player1Board);
 		
-		playerTorpedo.fire(new ConcreteTarget(1, 1));
+		playerTorpedo.fire(new ExactTarget(1, 1));
 		
-		playerTorpedo.fire(new ConcreteTarget(10, 10));
-		playerTorpedo.fire(new ConcreteTarget(10, 10));
-		playerTorpedo.fire(new ConcreteTarget(10, 9));
+		playerTorpedo.fire(new ExactTarget(10, 10));
+		playerTorpedo.fire(new ExactTarget(10, 10));
+		playerTorpedo.fire(new ExactTarget(10, 9));
 		
-		playerTorpedo.fire(new ConcreteTarget(0, 0));
+		playerTorpedo.fire(new ExactTarget(0, 0));
 		
-		playerTorpedo.fire(new ConcreteTarget(8, 8));
-		playerTorpedo.fire(new ConcreteTarget(7, 8));
+		playerTorpedo.fire(new ExactTarget(8, 8));
+		playerTorpedo.fire(new ExactTarget(7, 8));
 		
 		player1Board.getAllShip();
 	}

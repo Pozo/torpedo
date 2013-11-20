@@ -1,5 +1,5 @@
 package torpedo.network.protocol;
 
-public enum AvailableProcedures {
+public enum Procedures {
 	GREETING,FIRE,HELP;
 }

@@ -1,8 +1,9 @@
-package torpedo.coordinate;
+package torpedo.aim;
 
 import java.util.ArrayList;
 
 import torpedo.Ship;
+import torpedo.coordinate.Coordinate;
 import torpedo.network.protocol.FireResultType;
 
 public class AITarget implements TargetingSystem {

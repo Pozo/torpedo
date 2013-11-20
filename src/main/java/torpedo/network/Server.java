@@ -9,6 +9,8 @@ import java.net.Socket;
 import torpedo.network.protocol.MinerProtocol;
 
 public abstract class Server implements MinerProtocol {
+	private static final String SIGNAL_END = "\n";
+	
 	private ServerSocket serverSocket;
 	private boolean listening;
 
@@ -43,7 +45,7 @@ public abstract class Server implements MinerProtocol {
 	protected void sendResponse(Socket socket, String message) throws IOException {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-		bw.write(message + "\n");
+		bw.write(message + SIGNAL_END);
 		bw.flush();
 	}
 }

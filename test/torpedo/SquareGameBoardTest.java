@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import torpedo.board.SquareGameBoard;
 import torpedo.coordinate.Coordinate;
 
 public class SquareGameBoardTest {

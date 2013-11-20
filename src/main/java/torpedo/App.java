@@ -2,9 +2,10 @@ package torpedo;
 
 import java.util.ArrayList;
 
-import torpedo.coordinate.CachedRandomTarget;
+import torpedo.aim.CachedRandomTarget;
+import torpedo.aim.RandomTarget;
+import torpedo.board.SquareGameBoard;
 import torpedo.coordinate.Coordinate;
-import torpedo.coordinate.RandomTarget;
 import torpedo.network.protocol.FireResultType;
 import torpedo.utils.GameBoardPrinter;
 import torpedo.utils.ShipFromFile;
@@ -19,12 +20,13 @@ public class App {
 	
 	public static void main(String[] args) {
 		SquareGameBoard gameBoard = new SquareGameBoard(BOARD_SIZE);
-		//initializeRandomBoard(gameBoard, DEFAULT_SHIP_NUMBER);
-		initializeBoardFromFile(gameBoard);
+		initializeRandomBoard(gameBoard, DEFAULT_SHIP_NUMBER);
+		//initializeBoardFromFile(gameBoard);
 		
 		new GameBoardPrinter(gameBoard).print();
 		System.out.println(gameBoard.getPlacedShipNumber());
-		while(!gameBoard.isAllShipWrecked()) {
+		
+		while(!gameBoard.isAllShipWrecked() && gameBoard.isAllCoordinateHitted()) {
 			SingleTorpedo playerTorpedo = new SingleTorpedo(gameBoard);
 			
 			CachedRandomTarget targetingSystem = new CachedRandomTarget(BOARD_SIZE);
@@ -33,7 +35,7 @@ public class App {
 			if(fire == FireResultType.HIT) {
 				System.out.println("HIT! ");
 			} else if(fire == FireResultType.MISS) {
-				//System.out.println("MISS! ");
+				System.out.println("MISS! ");
 			} else if(fire == FireResultType.SUNK) {
 				System.out.println("Wrecked! ");
 			}
@@ -47,9 +49,10 @@ public class App {
 			try {
 				Coordinate coordinate = new RandomTarget(playerBoard.getBoardWidth()).getCoordinate();
 				Ship ship = new ShipRandomly(ShipRandomly.RECTANGLE_SIZE).getShip();
-				playerBoard.placeShipTo(coordinate, ship);				
+				ship.transformCoordinates(coordinate);
+				playerBoard.placeShip(ship);				
 			} catch (IllegalArgumentException exception) {
-				//System.out.println(exception.getMessage());
+				System.err.println(exception.getMessage());
 			}
 
 		}
@@ -57,24 +60,20 @@ public class App {
 	public static void initializeBoardFromFile(SquareGameBoard playerBoard) {
 		ShipFromFile shipsFromFile = new ShipFromFile("ships.txt");
 		ArrayList<Ship> ships = shipsFromFile.getShips();
-		
 	
 		for(Ship ship : ships) {
 			boolean success = false;
-			
+			System.out.println(ship);
 			while(!success) {
 				try {
 					Coordinate coordinate = new RandomTarget(playerBoard.getBoardWidth()).getCoordinate();
-					System.out.println(coordinate);
-					System.out.println(ship);
 					ship.transformCoordinates(coordinate);
 					System.out.println(ship);
-					success = playerBoard.placeShipTo(coordinate, ship);
+					success = playerBoard.placeShip(ship);
 				} catch (IllegalArgumentException exception) {
-					//System.out.println(exception.getMessage());
-				}			
+					System.err.println(exception.getMessage());
+				}
 			}
-			break;
 		}
 	}
 }

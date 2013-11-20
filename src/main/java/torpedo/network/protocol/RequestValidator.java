@@ -16,7 +16,7 @@ public class RequestValidator {
 	}
 
 	private boolean isAvailableProcedure(String request) {
-		if(request.toUpperCase().startsWith(AvailableProcedures.FIRE.name()) || request.toUpperCase().startsWith(AvailableProcedures.GREETING.name())) {
+		if(request.toUpperCase().startsWith(Procedures.FIRE.name()) || request.toUpperCase().startsWith(Procedures.GREETING.name())) {
 			return true;
 		}
 		return false;

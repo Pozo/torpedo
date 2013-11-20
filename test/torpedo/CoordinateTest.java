@@ -38,5 +38,15 @@ public class CoordinateTest {
 	public void testEqualsObject() {
 		Assert.assertTrue(new Coordinate(4, 6).equals(new Coordinate(4, 6)));
 	}
-
+	@Test
+	public void testEqualsObjectAfterTransform() {
+		Coordinate coordiante = new Coordinate(4, 6);
+		coordiante.offset(new Coordinate(1, 1));
+		Assert.assertTrue(coordiante.equals(new Coordinate(5, 7)));
+	}
+	@Test
+	public void testEqualsObjectAfterValueChange() {
+		Coordinate coordiante = new Coordinate(4, 6);
+		Assert.assertTrue(new Coordinate(4, 6).equals(new Coordinate(4, 6)));
+	}
 }

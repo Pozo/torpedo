@@ -1,8 +1,10 @@
 package torpedo;
 
-import torpedo.coordinate.ConcreteTarget;
+import torpedo.aim.ExactTarget;
+import torpedo.aim.TargetingSystem;
+import torpedo.board.GameBoard;
+import torpedo.board.SquareGameBoard;
 import torpedo.coordinate.Coordinate;
-import torpedo.coordinate.TargetingSystem;
 import torpedo.network.protocol.FireResultType;
 
 
@@ -33,6 +35,6 @@ public class SingleTorpedo implements Torpedo {
 	}
 
 	public FireResultType fire(int x, int y) {
-		return this.fire(new ConcreteTarget(x, y));
+		return this.fire(new ExactTarget(x, y));
 	}
 }

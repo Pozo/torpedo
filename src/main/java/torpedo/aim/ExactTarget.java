@@ -1,10 +1,12 @@
-package torpedo.coordinate;
+package torpedo.aim;
 
-public class ConcreteTarget implements TargetingSystem  {
+import torpedo.coordinate.Coordinate;
+
+public class ExactTarget implements TargetingSystem  {
 	private final int x;
 	private final int y;
 	
-	public ConcreteTarget(int x, int y) {
+	public ExactTarget(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
