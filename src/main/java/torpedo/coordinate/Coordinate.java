@@ -43,18 +43,18 @@ public class Coordinate implements Comparable<Coordinate> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+ 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+		
 		Coordinate other = (Coordinate) obj;
-		if (x != other.x)
-			return false;
-		if (y != other.y)
-			return false;
-		return true;
+		if (x == other.x && y == other.y) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -76,26 +76,26 @@ public class Coordinate implements Comparable<Coordinate> {
 		this.x = (this.originX + origo.getX());
 		this.y = (this.originY + origo.getY());
 	}
-	public boolean hasLeftNeighbor(int boardWidth) {
-		if(this.getY() > 0 && boardWidth>0 ) {
+	public boolean hasPossibleLeftNeighbor(int boardWidth) {
+		if(this.getY() > 0) {
 			return true;
 		}
 		return false;
 	}
-	public boolean hasRightNeighbor(int boardWidth) {
-		if(this.getY()< boardWidth-1 && boardWidth>0) {
+	public boolean hasPossibleRightNeighbor(int boardWidth) {
+		if(this.getX()+1 < boardWidth) {
 			return true;
 		}
 		return false;
 	}
-	public boolean hasTopNeighbor(int boardHeight) {
-		if(this.getX() > 0 && boardHeight>0) {
+	public boolean hasPossibleTopNeighbor(int boardHeight) {
+		if(this.getY()+1 < boardHeight) {
 			return true;
 		}
 		return false;
 	}
-	public boolean hasBottomNeighbor(int boardHeight) {
-		if(this.getX()<boardHeight-1) {
+	public boolean hasPossibleBottomNeighbor(int boardHeight) {
+		if(this.getY() > 0) {
 			return true;
 		}
 		return false;

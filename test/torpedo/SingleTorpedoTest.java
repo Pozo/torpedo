@@ -9,9 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import torpedo.aim.ExactTarget;
+import torpedo.board.ConsolePrinter;
 import torpedo.board.SquareGameBoard;
 import torpedo.coordinate.Coordinate;
-import torpedo.utils.GameBoardPrinter;
 
 public class SingleTorpedoTest {
 
@@ -52,19 +52,19 @@ public class SingleTorpedoTest {
 		player1Board.placeShip(ship2);
 		
 		
-		new GameBoardPrinter(player1Board).print();
+		new ConsolePrinter(player1Board).print();
 		SingleTorpedo playerTorpedo = new SingleTorpedo(player1Board);
 		
-		playerTorpedo.fire(new ExactTarget(1, 1));
+		playerTorpedo.fire(new ExactTarget(1, 1).getCoordinate());
 		
-		playerTorpedo.fire(new ExactTarget(10, 10));
-		playerTorpedo.fire(new ExactTarget(10, 10));
-		playerTorpedo.fire(new ExactTarget(10, 9));
+		playerTorpedo.fire(new ExactTarget(10, 10).getCoordinate());
+		playerTorpedo.fire(new ExactTarget(10, 10).getCoordinate());
+		playerTorpedo.fire(new ExactTarget(10, 9).getCoordinate());
 		
-		playerTorpedo.fire(new ExactTarget(0, 0));
+		playerTorpedo.fire(new ExactTarget(0, 0).getCoordinate());
 		
-		playerTorpedo.fire(new ExactTarget(8, 8));
-		playerTorpedo.fire(new ExactTarget(7, 8));
+		playerTorpedo.fire(new ExactTarget(8, 8).getCoordinate());
+		playerTorpedo.fire(new ExactTarget(7, 8).getCoordinate());
 		
 		System.out.println(player1Board.getAllShip());
 	}

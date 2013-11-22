@@ -5,19 +5,23 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import torpedo.Ship;
 import torpedo.SingleTorpedo;
-import torpedo.aim.ExactTarget;
 import torpedo.aim.RandomTarget;
+import torpedo.board.ConsolePrinter;
 import torpedo.board.SquareGameBoard;
 import torpedo.coordinate.Coordinate;
 import torpedo.network.protocol.FireResultType;
 import torpedo.network.protocol.MinerProtocol;
+import torpedo.network.protocol.Procedures;
 import torpedo.network.protocol.RequestValidator;
-import torpedo.utils.GameBoardPrinter;
 import torpedo.utils.ShipRandomly;
 
 public class MinerServer extends Server implements MinerProtocol {
+	private static final Logger logger = LoggerFactory.getLogger(MinerServer.class);
 	private static final int PORT_NUMBER = 9876;
 	private static final int DEFAULT_SHIP_NUMBER = 2;
 	
@@ -47,10 +51,10 @@ public class MinerServer extends Server implements MinerProtocol {
 	}
 	private void processResponse(Socket socket, String request) throws IOException {
 		try {
-			if(request.startsWith(MinerProtocol.PROCEDURE_GREETING)) {
+			if(request.startsWith(Procedures.GREETING.name())) {
 				
 				acceptGreeting(socket, request);
-			} else if(request.startsWith(MinerProtocol.PROCEDURE_FIRE)) {
+			} else if(request.startsWith(Procedures.FIRE.name())) {
 				
 				acceptFire(socket, request);			
 			} else {
@@ -83,7 +87,7 @@ public class MinerServer extends Server implements MinerProtocol {
 			sendResponse(socket, fire.name().toString().toUpperCase());
 			
 			if(fire == FireResultType.WIN) {
-				System.out.println(String.format("Player WIN!!! Your fire count : %d", gameBoard.getFireCount()));
+				logger.info(String.format("Player WIN!!! Your fire count : %d", gameBoard.getFireCount()));
 				setListening(false);
 			}
 		}
@@ -99,10 +103,10 @@ public class MinerServer extends Server implements MinerProtocol {
 
 	public void greeting(int boardSize) {
 		gameBoard = new SquareGameBoard(boardSize);
-		System.out.println(String.format("Initialized a new gameboard with size : %d", gameBoard.getBoardWidth()));
+		logger.info(String.format("Initialized a new gameboard with size : %d", gameBoard.getWidth()));
 		initializePlayerBoard(gameBoard, DEFAULT_SHIP_NUMBER);
-		System.out.println(String.format("Placed %d ship to board", gameBoard.getPlacedShipNumber()));
-		new GameBoardPrinter(gameBoard).print();
+		logger.info(String.format("Placed %d ship to board", gameBoard.getPlacedShipNumber()));
+		new ConsolePrinter(gameBoard).print();
 	}
 	public boolean isBoardAvailable() {
 		return gameBoard != null;
@@ -111,8 +115,9 @@ public class MinerServer extends Server implements MinerProtocol {
 		if(isBoardAvailable()) {
 			SingleTorpedo playerTorpedo = new SingleTorpedo(gameBoard);
 			
-			FireResultType retval = playerTorpedo.fire(new ExactTarget(x,y));
-			System.out.println(String.format("Fire to : x:%d y:%d and the result is %s", x ,y, retval));
+			FireResultType retval = playerTorpedo.fire(new Coordinate(x,y));
+
+			logger.info(String.format("Fire to : x:%d y:%d and the result is %s", x ,y, retval));
 			gameBoard.incrementFireCount();
 			
 			if(gameBoard.isAllShipWrecked()) {
@@ -127,12 +132,12 @@ public class MinerServer extends Server implements MinerProtocol {
 	public static void initializePlayerBoard(SquareGameBoard playerBoard, int shipCount) {
 		while (playerBoard.getPlacedShipNumber() != shipCount) {
 			try {
-				Coordinate coordinate = new RandomTarget(playerBoard.getBoardHeight()).getCoordinate();
-				Ship ship = new ShipRandomly(playerBoard.getBoardHeight()).getShip();
+				Coordinate coordinate = new RandomTarget(playerBoard.getHeight()).getCoordinate();
+				Ship ship = new ShipRandomly(playerBoard.getHeight()).getShip();
 				ship.transformCoordinates(coordinate);
 				playerBoard.placeShip(ship);				
 			} catch (IllegalArgumentException exception) {
-				System.err.println("Invalid ship placing, retry !");
+				logger.error("Invalid ship placing, retry !");
 			}
 
 		}

@@ -26,7 +26,6 @@ public class PlayerTorpedoTest {
 		coordinates.add(new Coordinate(10, 10));
 		coordinates.add(new Coordinate(10, 11));
 		coordinates.add(new Coordinate(9, 11));
-		coordinates.add(new Coordinate(0, 0));
 		
 		return coordinates;
 	}
@@ -45,40 +44,42 @@ public class PlayerTorpedoTest {
 	
 		SingleTorpedo playerTorpedoTest = new SingleTorpedo(board);
 		ExactTarget targetingSystem = new ExactTarget(fireCoordinateX+10, fireCoordinateY+10);
-		Assert.assertTrue((playerTorpedoTest.fire(targetingSystem)) == FireResultType.HIT);
+		Assert.assertTrue((playerTorpedoTest.fire(targetingSystem.getCoordinate())) == FireResultType.HIT);
 	}
 	@Test
 	public void testFireHitWreckedStatus() {
 		int boardSize = 20;
 		
-		int fireCoordinateX = 10;
-		int fireCoordinateY = 10;
+		int fireCoordinateX = 4;
+		int fireCoordinateY = 4;
 		
 		SquareGameBoard board = new SquareGameBoard(boardSize);
 		
 		Coordinate coordinate = new Coordinate(fireCoordinateX, fireCoordinateY);
-		Ship ship = new Ship(getCoordinates());
+		
+		ArrayList<Coordinate> coordinates = new ArrayList<Coordinate>();
+		coordinates.add(new Coordinate(14, 14));
+		
+		Ship ship = new Ship(coordinates);
 		ship.transformCoordinates(coordinate);
 		board.placeShip(ship);
 	
 		SingleTorpedo playerTorpedoTest = new SingleTorpedo(board);
 		ExactTarget targetingSystem = new ExactTarget(fireCoordinateX, fireCoordinateY);
 		
-		playerTorpedoTest.fire(targetingSystem);
+		playerTorpedoTest.fire(targetingSystem.getCoordinate());
 		
-		targetingSystem = new ExactTarget(0, 0);
-		playerTorpedoTest.fire(targetingSystem);
+		targetingSystem = new ExactTarget(14+fireCoordinateX, 14+fireCoordinateY);
+		playerTorpedoTest.fire(targetingSystem.getCoordinate());
 		
-		System.out.println(ship);
-		
-		Assert.assertTrue((playerTorpedoTest.fire(targetingSystem)) == FireResultType.HIT );
+		Assert.assertTrue((playerTorpedoTest.fire(targetingSystem.getCoordinate())) == FireResultType.SUNK );
 	}
 	@Test
 	public void testFireMiss() {
 		int boardSize = 20;
 		
-		int fireCoordinateX = 11;
-		int fireCoordinateY = 11;
+		int fireCoordinateX = 4;
+		int fireCoordinateY = 4;
 		
 		SquareGameBoard board = new SquareGameBoard(boardSize);
 		
@@ -89,7 +90,7 @@ public class PlayerTorpedoTest {
 	
 		SingleTorpedo playerTorpedoTest = new SingleTorpedo(board);
 
-		Assert.assertTrue((playerTorpedoTest.fire(new ExactTarget(fireCoordinateX+1, fireCoordinateY))) == FireResultType.MISS );
+		Assert.assertTrue((playerTorpedoTest.fire(new ExactTarget(fireCoordinateX+1, fireCoordinateY).getCoordinate())) == FireResultType.MISS );
 	}
 	@Test(expected = IllegalArgumentException.class)
 	public void testFireOutOfBoard() {
@@ -105,7 +106,7 @@ public class PlayerTorpedoTest {
 		board.placeShip(ship);
 	
 		SingleTorpedo playerTorpedoTest = new SingleTorpedo(board);
-		Assert.assertTrue((playerTorpedoTest.fire(new ExactTarget(fireCoordinateX+1, fireCoordinateY))) == FireResultType.MISS );
+		Assert.assertTrue((playerTorpedoTest.fire(new ExactTarget(fireCoordinateX+1, fireCoordinateY).getCoordinate())) == FireResultType.MISS );
 	
 	}
 }

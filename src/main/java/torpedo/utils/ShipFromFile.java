@@ -35,32 +35,33 @@ public class ShipFromFile implements ShipRepository {
 		StringBuilder sb = new StringBuilder();
 		String shipNumber = "";
 		
-		for (String line : lines) {
-			
-			if(line.length() == 1) {
+		for (int i = 0; i < lines.length; i++) {
+			if(lines[i].length() == 1) {
 				if(sb.length()>0) {
 					list.addAll(parseShips(shipNumber, sb.toString()));					
 				}
-			
-				shipNumber = line;
+				shipNumber = lines[i];
 				sb.delete(0, sb.length());
 			} else {
-				sb.append(line);
+				sb.append(lines[i]);
 				sb.append("\n");
-			}
-			
+				
+				if(i == lines.length-1) {
+					list.addAll(parseShips(shipNumber, sb.toString()));		
+				}
+			}	
 		}
 		return list;
 	}
 	private ArrayList<Ship> parseShips(String shipNumberRaw, String rawCoordinates) {
 		ArrayList<Ship> list = new ArrayList<Ship>();
 		
-		ArrayList<Coordinate> parsedCoordinates = parseCoordinates(rawCoordinates);
+		//ArrayList<Coordinate> parsedCoordinates = parseCoordinates(rawCoordinates);
 		
 		int shipNumber = Integer.valueOf(shipNumberRaw);
 		
 		for (int i = 0; i < shipNumber; i++) {
-			list.add(new Ship(parsedCoordinates));
+			list.add(new Ship(parseCoordinates(rawCoordinates)));
 		}
 		return list;
 	}

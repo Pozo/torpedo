@@ -1,9 +1,6 @@
 package torpedo;
 
-import torpedo.aim.ExactTarget;
-import torpedo.aim.TargetingSystem;
 import torpedo.board.GameBoard;
-import torpedo.board.SquareGameBoard;
 import torpedo.coordinate.Coordinate;
 import torpedo.network.protocol.FireResultType;
 
@@ -11,13 +8,11 @@ import torpedo.network.protocol.FireResultType;
 public class SingleTorpedo implements Torpedo {
 	private GameBoard board;
 	
-	public SingleTorpedo(SquareGameBoard board) {
+	public SingleTorpedo(GameBoard board) {
 		this.board = board;
 	}
 	
-	public FireResultType fire(TargetingSystem targetingSystem) {
-		Coordinate fireCoordinate = targetingSystem.getCoordinate();
-		
+	public FireResultType fire(Coordinate fireCoordinate) {
 		for (Ship ship : board.getAllShip()) {
 			if(ship.hasCoordinate(fireCoordinate)) {
 			
@@ -33,6 +28,6 @@ public class SingleTorpedo implements Torpedo {
 	}
 
 	public FireResultType fire(int x, int y) {
-		return this.fire(new ExactTarget(x, y));
+		return this.fire(new Coordinate(x, y));
 	}
 }

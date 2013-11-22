@@ -1,9 +1,7 @@
 package torpedo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Set;
+import java.util.List;
 
 import torpedo.coordinate.Coordinate;
 import torpedo.coordinate.CoordinateArrayUtils;
@@ -11,64 +9,55 @@ import torpedo.coordinate.CoordinateArrayUtils.Action;
 
 public class Ship {
 	private String name = "";
-	private final HashMap<Coordinate, Boolean> shipCoordinates = new HashMap<Coordinate,Boolean>();
+	private ArrayList<Coordinate> shipCoordinates = new ArrayList<Coordinate>();
 	
 	public Ship(ArrayList<Coordinate> shipPoints) {
 		if(shipPoints.size() <=0) {
 			throw new IllegalArgumentException("A ship size must be at least 1 !");
 		}
-		for (Coordinate coordinate : shipPoints) {
-			shipCoordinates.put(coordinate, false);
-		}
+		shipCoordinates = shipPoints;
 	}
 	public Ship(ArrayList<Coordinate> shipPoints, String name) {
 		this(shipPoints);
 		this.name = name;
 	}
 	public boolean isWrecked() {
-		boolean isWrecked = true;
-		for (Entry<Coordinate, Boolean> entry : shipCoordinates.entrySet()) {
-			isWrecked &= entry.getValue().booleanValue();
-		}
-		return isWrecked;
+		return shipCoordinates.isEmpty();
 	}
 
 	public void addHit(Coordinate coordinate) {
 		if(hasCoordinate(coordinate)) {
-			shipCoordinates.put(coordinate, true);
+			for (int i = 0; i < shipCoordinates.size(); i++) {
+				if(coordinate.equals(shipCoordinates.get(i))) {
+					shipCoordinates.remove(i);
+				}
+			}
 		} else {
 			throw new IllegalArgumentException(String.format("Ship is not contain this coordinate: %s", coordinate));
 		}
 	}
 	public boolean hasCoordinate(Coordinate coordinate) {
-		return shipCoordinates.keySet().contains(coordinate);
-		/*
 		for (Coordinate coord : getCoordinates()) {
 			if(coordinate.equals(coord)) {
 				return true;
 			}
 		}
 		return false;
-		*/
+
 	}
 	public int getCoordinatesNumber() {
 		return shipCoordinates.size();
 	}
-	private ArrayList<Coordinate> getShipCoordinatesAsList() {
-		ArrayList<Coordinate> coodinates = new ArrayList<Coordinate>();
-		coodinates.addAll(getCoordinates());
-		return coodinates;
-	}
 	public int getMaxWidth() {
-		CoordinateArrayUtils coordinateArrayUtils = new CoordinateArrayUtils(getShipCoordinatesAsList());
+		CoordinateArrayUtils coordinateArrayUtils = new CoordinateArrayUtils(getCoordinates());
 		return coordinateArrayUtils.getFarestCoordinateBy(Action.MOST_RIGT) - coordinateArrayUtils.getFarestCoordinateBy(Action.MOST_LEFT)+1;
 	}
 	public int getMaxHeight() {
-		CoordinateArrayUtils coordinateArrayUtils = new CoordinateArrayUtils(getShipCoordinatesAsList());
+		CoordinateArrayUtils coordinateArrayUtils = new CoordinateArrayUtils(getCoordinates());
 		return coordinateArrayUtils.getFarestCoordinateBy(Action.MOST_UPPER) - coordinateArrayUtils.getFarestCoordinateBy(Action.MOST_LOWER)+1;		
 	}
-	public Set<Coordinate> getCoordinates() {
-		return shipCoordinates.keySet();
+	public List<Coordinate> getCoordinates() {
+		return shipCoordinates;
 	}
 
 	@Override
@@ -83,11 +72,9 @@ public class Ship {
 		return name;
 	}
 	public boolean hasCommonCoordinate(Ship ship) {
-		for(Coordinate coordinate : this.getCoordinates()) {
-			for (Coordinate otherCoordinate : ship.getCoordinates()) {
-				if(coordinate.equals(otherCoordinate)) {
-					return true;
-				}
+		for (Coordinate otherCoordinate : ship.getCoordinates()) {
+			if(hasCoordinate(otherCoordinate)) {
+				return true;
 			}
 		}
 		return false;
@@ -96,9 +83,6 @@ public class Ship {
 		for (Coordinate coordinate : getCoordinates()) {
 			coordinate.offset(origo);
 		}		
-	}
-	public boolean addCoordinate(Coordinate coordinate) {
-		return shipCoordinates.put(coordinate, false);
 	}
 	@Override
 	public int hashCode() {
@@ -129,6 +113,10 @@ public class Ship {
 		} else if (!shipCoordinates.equals(other.shipCoordinates))
 			return false;
 		return true;
+	}
+	public void addCoordinate(Coordinate coordinate) {
+		shipCoordinates.add(coordinate);
+		
 	}
 	
 }

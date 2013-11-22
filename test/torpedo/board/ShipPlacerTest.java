@@ -49,7 +49,8 @@ public class ShipPlacerTest {
 		gameBoard.placeShip(new Ship(getSlimShipCoordinates()));
 		
 		System.out.println(gameBoard.getPlacedShipNumber());
-		System.out.println(new SingleTorpedo(gameBoard).fire(new RandomTarget(1)));
+		RandomTarget randomTarget = new RandomTarget(1);
+		System.out.println(new SingleTorpedo(gameBoard).fire(randomTarget.getCoordinate()));
 		
 	}
 	@Test(expected = IllegalArgumentException.class)

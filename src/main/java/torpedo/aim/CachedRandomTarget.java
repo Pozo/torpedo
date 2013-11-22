@@ -23,6 +23,9 @@ public class CachedRandomTarget implements TargetingSystem {
 		}
 		return randomCoordinate;
 	}
+	public boolean AddToCache(Coordinate coordinate) {
+		return previusCoordinates.add(coordinate);
+	}
 	public HashSet<Coordinate> getCachedCoordinates() {
 		return previusCoordinates;
 	}

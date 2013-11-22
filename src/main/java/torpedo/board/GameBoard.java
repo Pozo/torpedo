@@ -17,6 +17,6 @@ public interface GameBoard {
 	public boolean isCoordinateOnTheBoard(Coordinate coordinate);
 	public boolean addShip(Ship ship);
 	
-	public int getBoardWidth();
-	public int getBoardHeight();
+	public int getWidth();
+	public int getHeight();
 }

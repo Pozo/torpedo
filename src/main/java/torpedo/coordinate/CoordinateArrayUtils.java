@@ -1,16 +1,16 @@
 package torpedo.coordinate;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class CoordinateArrayUtils {
 	public enum Action {
 		MOST_LEFT,MOST_RIGT,MOST_UPPER,MOST_LOWER;
 	}
 	
-	private final ArrayList<Coordinate> coordinates;
+	private final List<Coordinate> coordinates;
 	
-	public CoordinateArrayUtils(ArrayList<Coordinate> coordinates) {
-		this.coordinates = coordinates;
+	public CoordinateArrayUtils(List<Coordinate> list) {
+		this.coordinates = list;
 	}
 	
 	public int getFarestCoordinateBy(Action action) {

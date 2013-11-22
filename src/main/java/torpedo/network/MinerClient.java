@@ -6,12 +6,17 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import torpedo.network.protocol.FireResultType;
 import torpedo.network.protocol.MinerProtocol;
+import torpedo.network.protocol.Procedures;
 import torpedo.network.protocol.RequestValidator;
 import torpedo.network.protocol.ResponseValidator;
 
 public class MinerClient extends Client implements MinerProtocol {
+	private static final Logger logger = LoggerFactory.getLogger(MinerClient.class);
 	
 	public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
 		if(args.length == 2) {
@@ -20,18 +25,18 @@ public class MinerClient extends Client implements MinerProtocol {
 			String request = null;
 
 			while((request = br.readLine().toUpperCase())!=null) {
-				if(request.startsWith(MinerProtocol.PROCEDURE_FIRE)) {
+				if(request.startsWith(Procedures.FIRE.name())) {
 					callFire(client, request);
-				} else if(request.startsWith(MinerProtocol.PROCEDURE_GREETING)) {
+				} else if(request.startsWith(Procedures.GREETING.name())) {
 					callGreeting(client, request);
 				} else if(request.startsWith("QUIT")) {
-					System.out.println("Bye looser");
+					logger.info("Bye looser");
 					break;
 				}
 			}
 			
 		} else {
-			System.err.println("You must specify the host and port number! (host first)");
+			logger.error("You must specify the host and port number! (host first)");
 		}
 	}
 
@@ -57,7 +62,7 @@ public class MinerClient extends Client implements MinerProtocol {
 				doFire(client, splittedRequest);							
 			}
 		} else {
-			System.err.println("Wrong request !");
+			logger.error("Wrong request !");
 		}
 	}
 
@@ -65,7 +70,8 @@ public class MinerClient extends Client implements MinerProtocol {
 		int xCoordinate = Integer.valueOf(splittedRequest[1]);
 		int yCoordinate = Integer.valueOf(splittedRequest[2]);
 		
-		System.out.println(client.fire(xCoordinate, yCoordinate));
+		FireResultType retval = client.fire(xCoordinate, yCoordinate);
+		logger.info("{}",retval);
 	}
 	
 	public MinerClient(InetAddress address, int portNumber)	throws UnknownHostException, IOException {
@@ -74,8 +80,7 @@ public class MinerClient extends Client implements MinerProtocol {
 
 	public void greeting(int boardSize) {
 		try {
-			System.out.println(String.format("%s%s%s",MinerProtocol.PROCEDURE_GREETING,MinerProtocol.PROCEDURE_PARAMETER_SEPARATOR,String.valueOf(boardSize)));
-			sendRequest(String.format("%s%s%s",MinerProtocol.PROCEDURE_GREETING,MinerProtocol.PROCEDURE_PARAMETER_SEPARATOR,String.valueOf(boardSize)));
+			sendRequest(String.format("%s%s%s",Procedures.GREETING.name(),MinerProtocol.PROCEDURE_PARAMETER_SEPARATOR,String.valueOf(boardSize)));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -25,7 +25,6 @@ public class ShipPlacer {
 		}
 	}
 	private void isThereAnyCollision(Ship placableShip) {
-
 		for (Ship ship : gameBoard.getAllShip()) {
 			if(placableShip.hasCommonCoordinate(ship)) {
 				throw new IllegalArgumentException("There are some collision !");
