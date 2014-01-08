@@ -1,4 +1,4 @@
-package torpedo.network.protocol;
+package torpedo.weapon;
 
 import static org.junit.Assert.fail;
 
@@ -7,11 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * ResponseValidatorTest.
+ * SingleTorpedoTest.
  * @author Zoltan_Polgar
  *
  */
-public class ResponseValidatorTest {
+public class SingleTorpedoTest {
 
     @Before
     public void setUp() {
@@ -22,12 +22,17 @@ public class ResponseValidatorTest {
     }
 
     @Test
-    public void testResponseValidator() {
+    public void testSingleTorpedo() {
         fail("Not yet implemented");
     }
 
     @Test
-    public void testValidate() {
+    public void testFireCoordinate() {
+        fail("Not yet implemented");
+    }
+
+    @Test
+    public void testFireIntInt() {
         fail("Not yet implemented");
     }
 

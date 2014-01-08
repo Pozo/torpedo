@@ -1,4 +1,4 @@
-package torpedo.network.protocol;
+package torpedo.ship.providers;
 
 import static org.junit.Assert.fail;
 
@@ -7,11 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * ResponseValidatorTest.
+ * ShipsRandomlyTest.
  * @author Zoltan_Polgar
  *
  */
-public class ResponseValidatorTest {
+public class ShipsRandomlyTest {
 
     @Before
     public void setUp() {
@@ -22,12 +22,12 @@ public class ResponseValidatorTest {
     }
 
     @Test
-    public void testResponseValidator() {
+    public void testShipsRandomly() {
         fail("Not yet implemented");
     }
 
     @Test
-    public void testValidate() {
+    public void testGetShips() {
         fail("Not yet implemented");
     }
 

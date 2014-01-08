@@ -1,4 +1,4 @@
-package torpedo.network.protocol;
+package torpedo.board;
 
 import static org.junit.Assert.fail;
 
@@ -7,11 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * ResponseValidatorTest.
+ * ConsolePrinterTest.
  * @author Zoltan_Polgar
  *
  */
-public class ResponseValidatorTest {
+public class ConsolePrinterTest {
 
     @Before
     public void setUp() {
@@ -22,12 +22,12 @@ public class ResponseValidatorTest {
     }
 
     @Test
-    public void testResponseValidator() {
+    public void testConsolePrinter() {
         fail("Not yet implemented");
     }
 
     @Test
-    public void testValidate() {
+    public void testPrint() {
         fail("Not yet implemented");
     }
 

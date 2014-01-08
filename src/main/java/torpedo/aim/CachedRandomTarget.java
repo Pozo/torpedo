@@ -1,32 +1,51 @@
 package torpedo.aim;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import torpedo.coordinate.Coordinate;
 
+/**
+ * CachedRandomTarget.
+ *
+ * @author Zoltan_Polgar
+ *
+ */
 public class CachedRandomTarget implements TargetingSystem {
-	private static final HashSet<Coordinate> previusCoordinates = new HashSet<Coordinate>();
-	private final RandomTarget randomTarget;
-	
-	public CachedRandomTarget(int bound) {
-		randomTarget = new RandomTarget(bound);
-	}
-	public static HashSet<Coordinate> getPreviuscoordinates() {
-		return previusCoordinates;
-	}
-	public Coordinate getCoordinate() {
-		Coordinate randomCoordinate = randomTarget.generateCoordinate();
-		
-		while(!previusCoordinates.add(randomCoordinate)) {
+    private static final Set<Coordinate> PREVIUS_COORDINATES = new HashSet<Coordinate>();
+    private final RandomTarget randomTarget;
 
-			randomCoordinate = randomTarget.generateCoordinate();
-		}
-		return randomCoordinate;
-	}
-	public boolean AddToCache(Coordinate coordinate) {
-		return previusCoordinates.add(coordinate);
-	}
-	public HashSet<Coordinate> getCachedCoordinates() {
-		return previusCoordinates;
-	}
+    /**
+     * CachedRandomTarget.
+     *
+     * @param bound bound size
+     */
+    public CachedRandomTarget(int bound) {
+        randomTarget = new RandomTarget(bound);
+    }
+    /**
+     * getCoordinate.
+     * @return coordinate
+     */
+    public Coordinate getCoordinate() {
+        Coordinate randomCoordinate = randomTarget.generateCoordinate();
+
+        while (!PREVIUS_COORDINATES.add(randomCoordinate)) {
+
+            randomCoordinate = randomTarget.generateCoordinate();
+        }
+        return randomCoordinate;
+    }
+    /**
+     * AddToCache.
+     * @param coordinate coordinate
+     * @return successful added
+     */
+    public boolean addToCache(Coordinate coordinate) {
+        return PREVIUS_COORDINATES.add(coordinate);
+    }
+
+    public Set<Coordinate> getCachedCoordinates() {
+        return PREVIUS_COORDINATES;
+    }
 }

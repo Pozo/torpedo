@@ -1,9 +1,17 @@
-package torpedo.utils;
+package torpedo.ship.providers;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import torpedo.Ship;
-
-public interface ShipRepository {
-	public ArrayList<Ship> getShips();
+import torpedo.ship.Ship;
+/**
+ * ShipProvider.
+ * @author Zoltan_Polgar
+ *
+ */
+public interface ShipProvider {
+    /**
+     * getShips.
+     * @return List<Ship>
+     */
+    List<Ship> getShips();
 }

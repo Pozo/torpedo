@@ -6,47 +6,70 @@ import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import torpedo.network.protocol.MinerProtocol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public abstract class Server implements MinerProtocol {
-	private static final String SIGNAL_END = "\n";
-	
-	private ServerSocket serverSocket;
-	private boolean listening;
+/**
+ * Server.
+ * @author Zoltan_Polgar
+ *
+ */
+public abstract class Server {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
+    private static final String SIGNAL_END = "\n";
 
-	public Server(int listeningPortNumber) {
-		try {
-			serverSocket = new ServerSocket(listeningPortNumber);
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
-			System.exit(-1);
-		}
-	}
+    private ServerSocket serverSocket;
+    private boolean listening;
 
-	public void startListening() {
-		try {
-			setListening(true);
+    /**
+     * Server.
+     * @param listeningPortNumber port number
+     */
+    public Server(int listeningPortNumber) {
+        try {
+            serverSocket = new ServerSocket(listeningPortNumber);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
+    }
+    /**
+     * startListening.
+     */
+    public void startListening() {
+        try {
+            setListening(true);
 
-			while (listening) {
-				Socket socket = serverSocket.accept();
-				//String remoteSocketAddress = socket.getRemoteSocketAddress().toString();
+            while (listening) {
+                Socket socket = serverSocket.accept();
+                //String remoteSocketAddress = socket.getRemoteSocketAddress().toString();
 
-				processRequest(socket);
-			}
-			serverSocket.close();
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
-		}
-	}
-	protected abstract void processRequest(Socket socket) throws IOException;
-	public void setListening(boolean state) {
-		this.listening = true;
-	}
-	protected void sendResponse(Socket socket, String message) throws IOException {
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                processRequest(socket);
+            }
+            serverSocket.close();
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
+    }
+    /**
+     * processRequest.
+     * @param socket socket
+     * @throws IOException io exception
+     */
+    protected abstract void processRequest(Socket socket) throws IOException;
 
-		bw.write(message + SIGNAL_END);
-		bw.flush();
-	}
+    public void setListening(boolean state) {
+        listening = state;
+    }
+    /**
+     * sendResponse.
+     * @param socket socket
+     * @param message message
+     * @throws IOException IO Exception
+     */
+    protected void sendResponse(Socket socket, String message) throws IOException {
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+        bw.write(message + SIGNAL_END);
+        bw.flush();
+    }
 }
-

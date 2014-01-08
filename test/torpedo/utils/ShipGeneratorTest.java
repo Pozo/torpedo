@@ -5,26 +5,32 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import torpedo.Ship;
-import torpedo.utils.ShipRandomly;
+import torpedo.ship.Ship;
+import torpedo.ship.providers.RandomShipGenerator;
 
+/**
+ * ShipGeneratorTest.
+ * @author Zoltan_Polgar
+ *
+ */
 public class ShipGeneratorTest {
 
-	@Before
-	public void setUp() throws Exception {
-	}
+    @Before
+    public void setUp() {
+    }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @After
+    public void tearDown() {
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testGetShipIllegalArgument() {
-		new ShipRandomly(0).getShip();
-	}
-	@Test
-	public void testGetShip() {
-		Ship ship = new ShipRandomly(4).getShip();
-		Assert.assertEquals(1, ship.getCoordinatesNumber());
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetShipIllegalArgument() {
+        new RandomShipGenerator(0).getShip();
+    }
+
+    @Test
+    public void testGetShip() {
+        Ship ship = new RandomShipGenerator(4).getShip();
+        Assert.assertEquals(1, ship.getCoordinatesNumber());
+    }
 }
